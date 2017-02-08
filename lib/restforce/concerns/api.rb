@@ -180,6 +180,28 @@ module Restforce
         end
       end
 
+      # Public: Returns a detailed description of the Compact Page Layout for the
+      # specified sobject type, or URIs for layouts if the sobject has
+      # multiple Record Types.
+      #
+      # Only available in version 28.0 and later of the Salesforce API.
+      #
+      # Examples:
+      #  # get the layouts for the sobject
+      #  client.describe_compact_layouts('Account')
+      #  # => { ... }
+      #
+      #  # get the layout for the specified Id for the sobject
+      #  client.describe_compact_layouts('Account', '012E0000000RHEp')
+      #  # => { ... }
+      #
+      # Returns the Hash representation of the describe_compact_layouts result
+      def tabs
+        version_guard(31.0) do
+          api_get('tabs').body
+        end
+      end
+
       # Public: Get the current organization's Id.
       #
       # Examples
