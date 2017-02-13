@@ -154,6 +154,28 @@ module Restforce
         end
       end
 
+      # Public: Returns a detailed description of the Page Layout for the
+      # specified sobject type, or URIs for layouts if the sobject has
+      # multiple Record Types.
+      #
+      # Only available in version 28.0 and later of the Salesforce API.
+      #
+      # Examples:
+      #  # get the layouts for the sobject
+      #  client.describe_layouts('Account')
+      #  # => { ... }
+      #
+      #  # get the layout for the specified Id for the sobject
+      #  client.describe_layouts('Account', '012E0000000RHEp')
+      #  # => { ... }
+      #
+      # Returns the Hash representation of the describe_layouts result
+      def describe_named_layouts(sobject, layout_name)
+        version_guard(31.0) do
+          api_get("sobjects/#{sobject}/describe/namedLayouts/#{layout_name}").body
+        end
+      end
+
       # Public: Returns a detailed description of the Compact Page Layout for the
       # specified sobject type, or URIs for layouts if the sobject has
       # multiple Record Types.
