@@ -202,6 +202,34 @@ module Restforce
         end
       end
 
+      # Public: Returns a detailed description of the List Views for the
+      # specified sobject type, or URIs for list views if the sobject has
+      # multiple.
+      #
+      # Only available in version 32.0 and later of the Salesforce API.
+      #
+      # Examples:
+      #  # get the list views for the sobject
+      #  client.listviews('Account')
+      #  # => { ... }
+      #
+      #  # get the list views for the specified Id for the sobject
+      #  client.listviews('Account', '012E0000000RHEp')
+      #  # => { ... }
+      #
+      # Returns the Hash representation of the describe_layouts result
+      def list_views(sobject, listview_id = nil, get_results = false)
+        version_guard(32.0) do
+          if listview_id && get_results
+            api_get("sobjects/#{sobject}/listviews/#{listview_id}/results").body
+          elsif listview_id
+            api_get("sobjects/#{sobject}/listviews/#{listview_id}").body
+          else
+            api_get("sobjects/#{sobject}/listviews").body
+          end
+        end
+      end
+
       # Public: Returns a detailed description of the Compact Page Layout for the
       # specified sobject type, or URIs for layouts if the sobject has
       # multiple Record Types.
@@ -210,11 +238,11 @@ module Restforce
       #
       # Examples:
       #  # get the layouts for the sobject
-      #  client.describe_compact_layouts('Account')
+      #  client.tabs('Account')
       #  # => { ... }
       #
       #  # get the layout for the specified Id for the sobject
-      #  client.describe_compact_layouts('Account', '012E0000000RHEp')
+      #  client.tabs('Account', '012E0000000RHEp')
       #  # => { ... }
       #
       # Returns the Hash representation of the describe_compact_layouts result
